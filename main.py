@@ -135,16 +135,32 @@ def isValidStuId(stu_id):
         return False
 
 
+def libraryHasBook(book_to_check):
+    has_found = False
+    for library_book in book_names:
+        if book_to_check == library_book:
+            has_found = True
+            break  # skip the closest encapsulating loop (including for loop and while loop)
+    return has_found
+
+
 def borrowBook(stu_id, book_name):
     if not isValidStuId(stu_id):
         return "invalid student id"
 
+    if not libraryHasBook(book_name):
+        print("we do not have this book")
     for i in range(len(book_names)):
         if book_names[i] == book_name:
             if book_quantities[i] > 0:
                 if borrowedLessThanMax(stu_id):
                     addBookToStu(stu_id, book_name)
                     book_quantities[i] -= 1
+                    print(f'you have borrowed {book_name} successfully')
+                else:
+                    print("you have already borrowed max number of books")
+            else:
+                print('the book you have chosen is out of stock')
 
 
 def studentHasBook(stu_id, book_name):
@@ -170,9 +186,66 @@ def returnBook(stu_id, book_name):
                 book_quantities[i] += 1
 
 
+def book_borrowed_by_member(stu_id):
+    if not isValidStuId(stu_id):
+        print("Invalid student id")
+    else:
+        counter = 0
+        for book_name in student_books[stu_id]:
+            if book_name != "NA":
+                print(book_name)
+                counter = counter + 1
+        if counter == 0:
+            print("you have not borrowed any book so far")
+
+
+def book_available():
+    for i in range(len(book_names)):
+        if book_quantities[i] > 0:
+            print(f"Book_Title: {book_names[i]}, Author: {book_authors[i]}, Quantity: {book_quantities[i]}")
+
 
 # Press the green button in the gutter to run the script.
-if __name__ == '__main__':
+# stateless service 无状态服务 - stateful service 有状态服务
+# session cookie - persistent cookie
+# server - client https{id, info}
+# server - client https{cookie, }
+def show_menu():
+    print("Enter 1 to show available books and quantities\n")
+    print("2: check books you borrowed\n")
+    print("3: borrow book\n")
+    print("4: return book\n")
 
+
+if __name__ == '__main__':
+    while True:
+        show_menu()
+        user_input = input("Enter your choice: ")
+        # print(user_input)
+        if user_input == '1':
+            book_available()
+        elif user_input == '2':
+            # try catch/except block
+            try:
+                user_id = int(input("enter your id: "))
+            except ValueError:
+                print("wrong format")
+            book_borrowed_by_member(user_id)
+        elif user_input == '3':
+            try:
+                user_id = int(input("enter your id: "))
+            except ValueError:
+                print("wrong format")
+            book = input("enter the book you want to borrow: ")
+            borrowBook(user_id, book)
+        elif user_input == '4':
+            try:
+                user_id = int(input("enter your id: "))
+            except ValueError:
+                print("wrong format")
+            return_book = input("enter the book you would like to return")
+            returnBook(user_id, return_book)
+        else:
+            print('the number is invalid')
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
