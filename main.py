@@ -123,6 +123,7 @@ def borrowedLessThanMax(stu_id):
 
 
 def addBookToStu(stu_id, book_name):
+    print("eddie")
     for i in range(3):
         if student_books[stu_id][i] == "NA":
             student_books[stu_id][i] = book_name
