@@ -106,6 +106,7 @@ student_books = []
 max_amount = 3
 for i in range(50):
     print("hello")
+    print("hello")
     placeholder = ["NA", "NA", "NA", "NA"]
     student_books.append(placeholder)
 
